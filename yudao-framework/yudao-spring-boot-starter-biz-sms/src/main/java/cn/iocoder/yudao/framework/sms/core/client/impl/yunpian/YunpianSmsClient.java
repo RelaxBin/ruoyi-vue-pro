@@ -35,7 +35,7 @@ import static cn.iocoder.yudao.framework.common.util.date.DateUtils.TIME_ZONE_DE
  * 云片短信客户端的实现类
  *
  * @author zzf
- * @date 9:48 2021/3/5
+ * @since 9:48 2021/3/5
  */
 @Slf4j
 public class YunpianSmsClient extends AbstractSmsClient {
@@ -83,7 +83,8 @@ public class YunpianSmsClient extends AbstractSmsClient {
         }
         // 参考 https://www.yunpian.com/official/document/sms/zh_cn/introduction_demos_encode_sample 格式化
         StringJoiner joiner = new StringJoiner("&");
-        templateParams.forEach(param -> joiner.add(String.format("#%s#=%s", param.getKey(), URLUtil.encode(String.valueOf(param.getValue())))));
+        templateParams.forEach(param -> joiner.add(String.format("#%s#=%s", param.getKey(),
+                URLUtil.encode(String.valueOf(param.getValue())))));
         return joiner.toString();
     }
 
