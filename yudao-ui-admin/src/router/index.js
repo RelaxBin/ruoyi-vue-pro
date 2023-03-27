@@ -8,18 +8,20 @@ Vue.use(Router)
 /**
  * Note: 路由配置项
  *
- * hidden: true                   // 当设置 true 的时候该路由不会再侧边栏出现 如401，login等页面，或者如一些编辑页面/edit/1
+ * hidden: true                   // 【重要】当设置 true 的时候该路由不会再侧边栏出现 如 401，login 等页面，或者如一些编辑页面 /edit/1
  * alwaysShow: true               // 当你一个路由下面的 children 声明的路由大于1个时，自动会变成嵌套的模式--如组件页面
  *                                // 只有一个时，会将那个子路由当做根路由显示在侧边栏--如引导页面
  *                                // 若你想不管路由下面的 children 声明的个数都显示你的根路由
  *                                // 你可以设置 alwaysShow: true，这样它就会忽略之前定义的规则，一直显示根路由
+ * path: '/login',                // 【重要】访问的 URL 路径
+ * component: Layout,             // 【重要】对应的组件；也可以是 (resolve) => require(['@/views/login'], resolve),
  * redirect: noRedirect           // 当设置 noRedirect 的时候该路由在面包屑导航中不可被点击
- * name:'router-name'             // 设定路由的名字，一定要填写不然使用<keep-alive>时会出现各种问题
+ * name:'router-name'             // 【重要】设定路由的名字，一定要填写不然使用 <keep-alive> 时会出现各种问题
  * meta : {
-    noCache: true                // 如果设置为true，则不会被 <keep-alive> 缓存(默认 false)
-    title: 'title'               // 设置该路由在侧边栏和面包屑中展示的名字
-    icon: 'svg-name'             // 设置该路由的图标，对应路径src/assets/icons/svg
-    breadcrumb: false            // 如果设置为false，则不会在breadcrumb面包屑中显示
+    noCache: true                // 【重要】如果设置为 true，则不会被 <keep-alive> 缓存(默认 false)
+    title: 'title'               // 【重要】设置该路由在侧边栏和面包屑中展示的名字
+    icon: 'svg-name'             // 【重要】设置该路由的图标，对应路径 src/assets/icons/svg
+    breadcrumb: false            // 如果设置为 false，则不会在 breadcrumb 面包屑中显示
     activeMenu: '/system/user'   // 当路由设置了该属性，则会高亮相对应的侧边栏。
   }
  */
@@ -73,7 +75,8 @@ export const constantRoutes = [
         meta: {title: '首页', icon: 'dashboard', affix: true}
       }
     ]
-  }, {
+  },
+  {
     path: '/user',
     component: Layout,
     hidden: true,
@@ -83,9 +86,14 @@ export const constantRoutes = [
         component: (resolve) => require(['@/views/system/user/profile/index'], resolve),
         name: 'Profile',
         meta: {title: '个人中心', icon: 'user'}
-      }
-    ]
-  }, {
+      }, {
+        path: 'notify-message',
+        component: (resolve) => require(['@/views/system/notify/my/index'], resolve),
+        name: 'MyNotifyMessage',
+        meta: { title: '我的站内信', icon: 'message' },
+    }]
+  },
+  {
     path: '/dict',
     component: Layout,
     hidden: true,
@@ -96,7 +104,8 @@ export const constantRoutes = [
         meta: {title: '字典数据', icon: '', activeMenu: '/system/dict'}
       }
     ]
-  }, {
+  },
+  {
     path: '/job',
     component: Layout,
     hidden: true,
@@ -118,7 +127,8 @@ export const constantRoutes = [
         meta: {title: '修改生成配置', activeMenu: '/infra/codegen'}
       }
     ]
-  }, {
+  },
+  {
     path: '/bpm',
     component: Layout,
     hidden: true,
@@ -135,7 +145,8 @@ export const constantRoutes = [
         meta: {title: '查看 OA 请假', icon: 'view', activeMenu: '/bpm/oa/leave'}
       }
     ]
-  }, {
+  },
+  {
     path: '/bpm',
     component: Layout,
     hidden: true,
@@ -166,6 +177,65 @@ export const constantRoutes = [
         meta: {title: '流程详情', activeMenu: '/bpm/task/my'}
       }
     ]
+  },
+  {
+    path: '/property',
+    component: Layout,
+    hidden: true,
+    children: [{
+      path: 'value/:propertyId(\\d+)',
+      component: (resolve) => require(['@/views/mall/product/property/value'], resolve),
+      name: 'PropertyValue',
+      meta: {title: '商品属性值', icon: '', activeMenu: '/product/property'}
+    }
+    ]
+  },
+  {
+    path: '/spu',
+    component: Layout,
+    hidden: true,
+    children: [{
+      path: 'edit/:spuId(\\d+)',
+      component: (resolve) => require(['@/views/mall/product/spu/save'], resolve),
+      name: 'SpuEdit',
+      meta: {title: '修改商品', activeMenu: '/product/spu'}
+    },
+      {
+        path: 'add',
+        component: (resolve) => require(['@/views/mall/product/spu/save'], resolve),
+        name: 'SpuAdd',
+        meta: {title: '添加商品', activeMenu: '/product/spu'}
+      }
+    ]
+  },
+  {
+    path: '/trade/order',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'detail',
+        name: '订单详情',
+        hidden: true,
+        meta: { title: '订单详情' },
+        component: (resolve) => require(['@/views/mall/trade/order/detail'], resolve)
+      }
+    ]
+  },
+  {
+    path: '/pay',
+    component: Layout,
+    hidden: true,
+    children: [{
+      path: 'order/submit',
+      name: 'PayOrderSubmit',
+      hidden: true,
+      meta: {
+        title: '收银台',
+        noCache: true
+      },
+      component: (resolve) => require(['@/views/pay/order/submit'], resolve)
+    }]
   }
 ]
 
